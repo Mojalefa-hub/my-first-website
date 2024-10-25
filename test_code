@@ -1,0 +1,23 @@
+import folium
+import pandas as pd
+
+data = pd.read_csv('kraaifontein_case.csv')
+
+map_center = [data['Latitude before'].mean(), data['Longitude before'].mean()]
+m = folium.Map(location=map_center, zoom_start=12)
+
+for index, row in data.iterrows():
+    folium.Marker(
+        location=[row['Latitude before'], row['Longitude before']],
+        popup=f"Household no.: {row['Household no.']}<br>Survey location: {row['Survey location']}<br><b>Before Pandemic</b>",
+        icon=folium.Icon(color='blue', icon='home', prefix='fa')
+    ).add_to(m)
+
+    folium.Marker(
+        location=[row['Latitude after'], row['Longitude after']],
+        popup=f"Household no.: {row['Household no.']}<br>Survey location: {row['Survey location']}<br>"
+              f"Relocation distance: {row['Relocation distance (km)']} km<br><b>After Pandemic</b>",
+        icon=folium.Icon(color='red', icon='home', prefix='fa')
+    ).add_to(m)
+
+m
